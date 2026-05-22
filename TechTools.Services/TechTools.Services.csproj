@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TechTools.Data\TechTools.Data.csproj" />
+    <ProjectReference Include="..\TechTools.Models\TechTools.Models.csproj" />
+  </ItemGroup>
+
+</Project>

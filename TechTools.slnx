@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TechTools.Data/TechTools.Data.csproj" />
+  <Project Path="TechTools.Models/TechTools.Models.csproj" />
+  <Project Path="TechTools.Services/TechTools.Services.csproj" />
+  <Project Path="TechTools.WebShop/TechTools.WebShop.csproj" />
+</Solution>
