@@ -41,7 +41,7 @@ namespace TechTools.Models
 
         public GPU()
         {
-            
+                
         }
 
         public GPU(int id, string brand, string model, decimal price, string? picture, string description)

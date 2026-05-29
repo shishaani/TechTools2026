@@ -32,7 +32,8 @@
             @Html.DisplayNameFor(model => model.Picture)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Picture)
+            <img scr="~/images/gpus/@(string.IsNullOrEmpty(Model.Picture) ? "default.jpg" : Model.Picture)"
+                 alt="Gpu Picture" width="150"/>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)

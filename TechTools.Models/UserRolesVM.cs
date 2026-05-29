@@ -1,0 +1,16 @@
+﻿namespace TechTools.Models
+{
+    public class UserRolesVM
+    {
+        public string UserId { get; set; }
+        public string Email { get; set; }
+
+        public List<RoleCheckbox> Roles { get; set; }
+    }
+
+    public class RoleCheckbox
+    {
+        public string RoleName { get; set; }
+        public bool IsSelected { get; set; }
+    }
+}

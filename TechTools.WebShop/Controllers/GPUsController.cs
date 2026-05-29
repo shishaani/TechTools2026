@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TechTools.Models;
 using TechTools.Services;
 
@@ -12,19 +13,45 @@ namespace TechTools.WebShop.Controllers
             return View(gpus);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(GPU g)
+        public IActionResult Create(GPU g, IFormFile? picture)
         {
             if (ModelState.IsValid)
             {
+
+                if(picture != null)
+                {
+                    string extension = Path.GetExtension(picture.FileName).ToLowerInvariant();
+                    string[] allowedExtensions = [".jpg", ".jpeg", ".png"];
+
+                    if (!allowedExtensions.Contains(extension))
+                    {
+                        ModelState.AddModelError("Picture", "Verkeerde type afbeelding!");
+                        return View(g);
+                    }
+
+                    string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/gpus");
+                    string pictureName = Guid.NewGuid() + extension;
+                    string pictureFullPath = Path.Combine(imageFolder, pictureName);
+
+                    using (var stream = new FileStream(pictureFullPath, FileMode.Create))
+                    {
+                        picture.CopyTo(stream);
+                    }
+
+                    g.Picture = pictureName;
+                }
+
                 gpuService.Create(g);
                 // terugkeren naar index pagina
                 return RedirectToAction("Index");
+
             }
 
             return View(g);
