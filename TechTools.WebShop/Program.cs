@@ -26,6 +26,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 
 builder.Services.AddScoped<GPUService>();
 builder.Services.AddScoped<RoleService>();
@@ -56,6 +57,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

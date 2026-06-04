@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TechTools.Services;
 
 namespace TechTools.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController(RoleService roleService) : Controller
     {
         public async Task<IActionResult> Index()

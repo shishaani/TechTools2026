@@ -1,0 +1,75 @@
+@model List<TechTools.WebShop.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Winkelwagen";
+}
+
+<h1>Winkelwagen</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Je winkelwagen is leeg.
+    </div>
+
+    <a asp-controller="GPUs" asp-action="Index" class="btn btn-primary">Verder winkelen</a>
+}
+else
+{
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Product</th>
+                <th>Prijs</th>
+                <th>Aantal</th>
+                <th>Totaal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(item.Picture))
+                        {
+                            <img src="~/images/gpus/default.png" height="50" alt="@item.Name" />
+                        }
+                        else
+                        {
+                            <img src="~/images/gpus/@item.Picture" height="50" alt="@item.Name" />
+                        }
+                    </td>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="id" value="@item.GPUId" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="0" class="form-control form-control-sm" style="max-width: 90px;" />
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                        </form>
+                    </td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="Remove" method="post">
+                            <input type="hidden" name="id" value="@item.GPUId" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Verwijder</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <form asp-controller="Cart" asp-action="Clear" method="post">
+            <button type="submit" class="btn btn-outline-danger">Winkelwagen leegmaken</button>
+        </form>
+
+        <div class="text-end">
+            <h4>Totaal: @Model.Sum(item => item.Total).ToString("C")</h4>
+            <a asp-controller="GPUs" asp-action="Index" class="btn btn-primary">Verder winkelen</a>
+        </div>
+    </div>
+}

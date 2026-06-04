@@ -58,29 +58,34 @@
                 @Html.DisplayFor(modelItem => item.Model)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                <span>€ </span>@Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Picture)
+                @if (item.Picture == null)
+                {
+                    <img src="~/images/gpus/default.png" height="100" />
+                }
+                else
+                {
+                    <img src="~/images/gpus/@item.Picture" height="100" />                        
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
 
-                @if (item.Picture == null)
+                @if (User.IsInRole("Admin"))
                 {
-                    <img src="~/images/activities/default.png" height="50" />
+                    <span>|</span> <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                    <span>|</span> <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 }
-                else
-                {
-                    <img src="~/images/activities/@item.Picture" height="50" />
-                }
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                <form asp-controller="Cart" asp-action="Add" method="post" class="mt-2">
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <button type="submit" class="btn btn-primary btn-sm">Toevoegen aan winkelwagen</button>
+                </form>
             </td>
         </tr>
 }
