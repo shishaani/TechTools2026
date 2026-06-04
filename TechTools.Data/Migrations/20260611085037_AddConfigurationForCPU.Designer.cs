@@ -12,8 +12,8 @@ using TechTools.Data;
 namespace TechTools.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260510215131_something")]
-    partial class something
+    [Migration("20260611085037_AddConfigurationForCPU")]
+    partial class AddConfigurationForCPU
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,57 @@ namespace TechTools.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TechTools.Models.CPU", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CPUs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Brand = "Intel",
+                            Description = "A 24‑core, 6.0 GHz high‑end CPU made for top‑tier gaming and heavy workloads.",
+                            Model = "Intel Core i9 14900K",
+                            Picture = "",
+                            Price = 489.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Brand = "AMD",
+                            Description = "The fastest gaming CPU with 3D V‑Cache and top FPS efficiency.",
+                            Model = "Ryzen 7 7800X3D",
+                            Picture = "",
+                            Price = 354.90m
+                        });
+                });
+
             modelBuilder.Entity("TechTools.Models.GPU", b =>
                 {
                     b.Property<int>("Id")
@@ -251,7 +302,6 @@ namespace TechTools.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Picture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
@@ -280,6 +330,37 @@ namespace TechTools.Data.Migrations
                             Picture = "",
                             Price = 699.00m
                         });
+                });
+
+            modelBuilder.Entity("TechTools.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("GPUId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PersonName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GPUId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -331,6 +412,17 @@ namespace TechTools.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TechTools.Models.Review", b =>
+                {
+                    b.HasOne("TechTools.Models.GPU", "GPU")
+                        .WithMany()
+                        .HasForeignKey("GPUId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GPU");
                 });
 #pragma warning restore 612, 618
         }

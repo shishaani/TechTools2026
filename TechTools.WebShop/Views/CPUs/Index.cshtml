@@ -1,0 +1,94 @@
+﻿@model IEnumerable<TechTools.Models.CPU>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (User.IsInRole("Admin") || User.IsInRole("Shopmanager"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Picture)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    <span>€ </span>@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @if (item.Picture == null)
+                    {
+                        <img src="~/images/cpus/default.png" height="100" />
+                    }
+                    else
+                    {
+                        <img src="~/images/cpus/@item.Picture" height="100" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Shopmanager"))
+                    {
+                        <span>|</span> <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <span>|</span> <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+
+                    <form asp-controller="Cart" asp-action="Add" method="post" class="mt-2">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-primary btn-sm">Toevoegen aan winkelwagen</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

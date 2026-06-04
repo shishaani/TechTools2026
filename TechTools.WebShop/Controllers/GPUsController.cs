@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using TechTools.Models;
 using TechTools.Services;
+using TechTools.WebShop.Models;
 
 namespace TechTools.WebShop.Controllers
 {
-    public class GPUsController(GPUService gpuService) : Controller
+    public class GPUsController(GPUService gpuService, ReviewService reviewService) : Controller
     {
         public IActionResult Index()
         {
@@ -13,7 +14,7 @@ namespace TechTools.WebShop.Controllers
             return View(gpus);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Shopmanager")]
         public IActionResult Create()
         {
             return View();
@@ -35,7 +36,7 @@ namespace TechTools.WebShop.Controllers
                         ModelState.AddModelError("Picture", "Verkeerde type afbeelding!");
                         return View(g);
                     }
-
+                    
                     string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/gpus");
                     string pictureName = Guid.NewGuid() + extension;
                     string pictureFullPath = Path.Combine(imageFolder, pictureName);
@@ -60,13 +61,43 @@ namespace TechTools.WebShop.Controllers
         public IActionResult Details(int id)
         {
             GPU? gpu = gpuService.Read(id);
+
             if (gpu == null)
             {
                 TempData["ErrorMessage"] = $"Geen GPU gevonden met id {id}.";
                 return RedirectToAction("Index");
             }
 
-            return View(gpu);
+            return View(new GPUDetailsViewModel
+            {
+                GPU = gpu,
+                Reviews = reviewService.ReadForGPU(id),
+                NewReview = new Review { GPUId = id }
+            });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Shopmanager,Klant")]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddReview(Review review) 
+        {
+            GPU? gpu = gpuService.Read(review.GPUId);
+            if (gpu == null)
+            {
+                TempData["ErrorMessage"] = $"Geen GPU gevonden met id {review.GPUId}.";
+                return RedirectToAction("Index");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Review niet opgeslagen. Controleer naam, beoordeling en score.";
+                return RedirectToAction("Details", new { id = review.GPUId });
+            }
+
+            reviewService.Create(review);
+            TempData["SuccessMessage"] = "Review toegevoegd.";
+
+            return RedirectToAction("Details", new { id = review.GPUId });
         }
 
         public IActionResult Delete(int id)

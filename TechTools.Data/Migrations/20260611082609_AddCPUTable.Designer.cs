@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechTools.Data;
 
@@ -11,9 +12,11 @@ using TechTools.Data;
 namespace TechTools.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260611082609_AddCPUTable")]
+    partial class AddCPUTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,18 +237,15 @@ namespace TechTools.Data.Migrations
 
                     b.Property<string>("Brand")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
@@ -256,26 +256,6 @@ namespace TechTools.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CPUs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Brand = "Intel",
-                            Description = "A 24‑core, 6.0 GHz high‑end CPU made for top‑tier gaming and heavy workloads.",
-                            Model = "Intel Core i9 14900K",
-                            Picture = "",
-                            Price = 489.00m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Brand = "AMD",
-                            Description = "The fastest gaming CPU with 3D V‑Cache and top FPS efficiency.",
-                            Model = "Ryzen 7 7800X3D",
-                            Picture = "",
-                            Price = 354.90m
-                        });
                 });
 
             modelBuilder.Entity("TechTools.Models.GPU", b =>

@@ -2,13 +2,13 @@
 
 namespace TechTools.Models
 {
-    public class GPU
+    public class CPU
     {
         // id is nodig voor databank, duidt specifieke records aan, dit is de 'Primary Key'
         public int Id { get; set; }
 
         // brand is nodig voor databank, duidt specifieke records aan, dit is de 'Brand'
-        [Required(ErrorMessage ="De brand naam is verplicht.")]
+        [Required(ErrorMessage = "De brand naam is verplicht.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "De brand naam moet tussen 2 en 50 tekens liggen.")]
         [Display(Name = "Brand naam.")]
         public string Brand { get; set; }
@@ -35,13 +35,14 @@ namespace TechTools.Models
         [Display(Name = "Beschrijving")]
         public string Description { get; set; }
 
-
-        public GPU()
+        // Lege constructor maken voor geen erros te hebben 
+        public CPU()
         {
-                
+            
         }
 
-        public GPU(int id, string brand, string model, decimal price, string? picture, string description)
+        // Constructor met de nodige eigenschappen
+        public CPU(int id, string brand, string model, decimal price, string? picture, string description)
         {
             Id = id;
             Brand = brand;

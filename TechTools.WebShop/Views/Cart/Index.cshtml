@@ -1,0 +1,114 @@
+@model TechTools.WebShop.Models.CartViewModel
+
+@{
+    ViewData["Title"] = "Winkelwagen";
+}
+
+<h1>Winkelwagen</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (!Model.Items.Any())
+{
+    <div class="alert alert-info">
+        Je winkelwagen is leeg.
+    </div>
+
+    <a asp-controller="GPUs" asp-action="Index" class="btn btn-primary">Verder winkelen</a>
+}
+else
+{
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Product</th>
+                <th>Prijs</th>
+                <th>Aantal</th>
+                <th>Totaal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(item.Picture))
+                        {
+                            <img src="~/images/gpus/default.png" height="50" alt="@item.Name" />
+                        }
+                        else
+                        {
+                            <img src="~/images/gpus/@item.Picture" height="50" alt="@item.Name" />
+                        }
+                    </td>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="id" value="@item.GPUId" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="0" class="form-control form-control-sm" style="max-width: 90px;" />
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                        </form>
+                    </td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="Remove" method="post">
+                            <input type="hidden" name="id" value="@item.GPUId" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Verwijder</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            @if (string.IsNullOrWhiteSpace(Model.DiscountCode))
+            {
+                <form asp-controller="Cart" asp-action="ApplyDiscount" method="post" class="d-flex gap-2">
+                    <input type="text" name="discountCode" class="form-control" placeholder="Kortingscode" />
+                    <button type="submit" class="btn btn-outline-primary">Toepassen</button>
+                </form>
+                <small class="text-muted">Actieve codes: Discount5, Tech10, Student15</small>
+            }
+            else
+            {
+                <div class="d-flex align-items-center gap-2">
+                    <span>Kortingscode: <strong>@Model.DiscountCode</strong></span>
+                    <form asp-controller="Cart" asp-action="RemoveDiscount" method="post">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Verwijderen</button>
+                    </form>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-6 text-md-end">
+            <p class="mb-1">Subtotaal: @Model.Subtotal.ToString("C")</p>
+            <p class="mb-1">Korting: -@Model.AppliedDiscount.ToString("C")</p>
+            <h4>Totaal: @Model.Total.ToString("C")</h4>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <form asp-controller="Cart" asp-action="Clear" method="post">
+            <button type="submit" class="btn btn-outline-danger">Winkelwagen leegmaken</button>
+        </form>
+
+        <a asp-controller="GPUs" asp-action="Index" class="btn btn-primary">Verder winkelen</a>
+    </div>
+}

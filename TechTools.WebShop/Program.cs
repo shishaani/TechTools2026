@@ -26,9 +26,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 
 builder.Services.AddScoped<GPUService>();
 builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<ReviewService>();
+builder.Services.AddScoped<CPUService>();
 
 
 var culture = new CultureInfo("nl-BE");
@@ -57,6 +60,9 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseSession();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -72,4 +78,25 @@ app.MapRazorPages()
 
 app.UseRequestLocalization(localizationOptions);
 
+await ApplyPendingMigrationsAsync(app.Services);
+await EnsureDefaultRolesAsync(app.Services);
+
 app.Run();
+
+static async Task ApplyPendingMigrationsAsync(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+}
+
+static async Task EnsureDefaultRolesAsync(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    if (!await roleManager.RoleExistsAsync("Klant"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Klant"));
+    }
+}

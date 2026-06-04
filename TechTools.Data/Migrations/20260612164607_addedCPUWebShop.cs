@@ -5,14 +5,14 @@
 namespace TechTools.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class something : Migration
+    public partial class addedCPUWebShop : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Model",
-                table: "GPUs",
+                table: "CPUs",
                 type: "nvarchar(50)",
                 maxLength: 50,
                 nullable: false,
@@ -21,7 +21,7 @@ namespace TechTools.Data.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Description",
-                table: "GPUs",
+                table: "CPUs",
                 type: "nvarchar(500)",
                 maxLength: 500,
                 nullable: false,
@@ -30,7 +30,7 @@ namespace TechTools.Data.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Brand",
-                table: "GPUs",
+                table: "CPUs",
                 type: "nvarchar(50)",
                 maxLength: 50,
                 nullable: false,
@@ -43,7 +43,7 @@ namespace TechTools.Data.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Model",
-                table: "GPUs",
+                table: "CPUs",
                 type: "nvarchar(max)",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -52,7 +52,7 @@ namespace TechTools.Data.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Description",
-                table: "GPUs",
+                table: "CPUs",
                 type: "nvarchar(max)",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -61,7 +61,7 @@ namespace TechTools.Data.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Brand",
-                table: "GPUs",
+                table: "CPUs",
                 type: "nvarchar(max)",
                 nullable: false,
                 oldClrType: typeof(string),

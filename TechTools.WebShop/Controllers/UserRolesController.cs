@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TechTools.Models;
 
 namespace SportsClub.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Shopmanager")]
     public class UserRolesController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
