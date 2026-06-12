@@ -13,6 +13,15 @@ namespace TechTools.Services
                 .ToList();
         }
 
+        public List<Review> ReadForCPU(int cpuId)
+        {
+            return db.Reviews
+                .Where(review => review.CPUId == cpuId)
+                .OrderByDescending(review => review.Id)
+                .ToList();
+        }
+
+
         public void Create(Review review)
         {
             db.Reviews.Add(review);

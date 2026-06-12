@@ -8,6 +8,8 @@ namespace TechTools.Models
 
         public int GPUId { get; set; }
         public GPU? GPU { get; set; }
+        public int CPUId { get; set; }
+        public CPU? CPU { get; set; }
 
         [Required(ErrorMessage = "Naam is verplicht.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Naam moet tussen 2 en 50 tekens liggen.")]
